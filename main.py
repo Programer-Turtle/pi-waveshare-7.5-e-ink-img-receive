@@ -8,6 +8,7 @@ import uuid
 
 app = Flask(__name__)
 detector = NudeDetector()
+register_heif_opener()
 
 blocked_catagories = ["BUTTOCKS_EXPOSED", "FEMALE_BREAST_EXPOSED", "FEMALE_GENITALIA_EXPOSED", "MALE_GENITALIA_EXPOSED", "ANUS_EXPOSED"]
 
