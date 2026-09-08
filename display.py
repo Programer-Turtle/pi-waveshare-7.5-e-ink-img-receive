@@ -11,24 +11,37 @@ if os.path.exists(libdir):
 from waveshare_epd import epd7in5_V2
 from PIL import Image, ImageOps
 
-
 def prepare_image(path):
+    target_width = 800
+    target_height = 480
+
     image = Image.open(path).convert("RGB")
 
-    target = (800, 480)
+    scale = min(
+        target_width / image.width,
+        target_height / image.height
+    )
 
-    image.thumbnail(target, Image.Resampling.LANCZOS)
+    new_width = round(image.width * scale)
+    new_height = round(image.height * scale)
 
-    canvas = Image.new("RGB", target, "white")
+    image = image.resize(
+        (new_width, new_height),
+        Image.Resampling.LANCZOS
+    )
 
-    x = (800 - image.width) // 2
-    y = (480 - image.height) // 2
+    canvas = Image.new(
+        "RGB",
+        (target_width, target_height),
+        "white"
+    )
+
+    x = (target_width - new_width) // 2
+    y = (target_height - new_height) // 2
 
     canvas.paste(image, (x, y))
 
-    image = canvas
-
-    image = image.convert("L")
+    image = canvas.convert("L")
 
     image = image.convert(
         "1",
@@ -36,7 +49,6 @@ def prepare_image(path):
     )
 
     return image
-
 
 def display_image(path):
     image = prepare_image(path)
