@@ -21,7 +21,7 @@ def upload_photo():
     photo = request.files["photo"]
 
     if not photo.filename:
-        return jsonify({"error": "No filename provided"}), 40
+        return jsonify({"error": "No filename provided"}), 400
 
     filename = f"{photo.filename}"
     filepath = UPLOAD_DIR / filename

@@ -17,12 +17,16 @@ def prepare_image(path):
 
     target = (800, 480)
 
-    image = ImageOps.fit(
-        image,
-        target,
-        method=Image.Resampling.LANCZOS,
-        centering=(0.5, 0.5)
-    )
+    image.thumbnail(target, Image.Resampling.LANCZOS)
+
+    canvas = Image.new("RGB", target, "white")
+
+    x = (800 - image.width) // 2
+    y = (480 - image.height) // 2
+
+    canvas.paste(image, (x, y))
+
+    image = canvas
 
     image = image.convert("L")
 
@@ -40,9 +44,9 @@ def display_image(path):
     epd = epd7in5_V2.EPD()
 
     epd.init()
+    epd.Clear()
     epd.display(epd.getbuffer(image))
     epd.sleep()
-    epd.Dev_exit()
 
 
 if __name__ == "__main__":
