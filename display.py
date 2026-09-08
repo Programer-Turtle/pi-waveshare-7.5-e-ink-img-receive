@@ -15,7 +15,9 @@ def prepare_image(path):
     target_width = 800
     target_height = 480
 
-    image = Image.open(path).convert("RGB")
+    image = Image.open(path)
+    image = ImageOps.exif_transpose(image)
+    image = image.convert("RGB")
 
     scale = min(
         target_width / image.width,
